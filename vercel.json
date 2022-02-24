@@ -5,8 +5,8 @@
       "dest": "/src/index.html"
     },
     {
-      "src": "/*",
-      "dest": "/api/url.go"
+      "src": "/.*",
+      "dest": "/api/url"
     }
   ]
 }
