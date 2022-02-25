@@ -5,7 +5,7 @@
       "dest": "/src/index.html"
     },
     {
-      "src": "/111",
+      "src": "/.*",
       "dest": "/api/url"
     }
   ]
