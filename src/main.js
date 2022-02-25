@@ -18,7 +18,6 @@ $(function () {
                 $("#modal-msg").modal('show');
                 return true;
             }
-            //var pattern = /^([a-zA-Z0-9]){5,15}$/;
             var pattern = /^([a-zA-Z0-9])+$/;
             if (!pattern.test(token)) {
                 $("#modal-msg-content").html("无效的自定义短链，仅支持字母、数字");
@@ -27,7 +26,7 @@ $(function () {
             }
         }
         if (url.length < URL_MIN_LENGTH || url.length > URL_MAX_LENGTH) {
-            $("#modal-msg-content").html("网址长度在 " + URL_MIN_LENGTH + " - " + URL_MAX_LENGTH);
+            $("#modal-msg-content").html("网址长度应为 " + URL_MIN_LENGTH + " - " + URL_MAX_LENGTH + " 个字符");
             $("#modal-msg").modal('show');
             return true;
         }
