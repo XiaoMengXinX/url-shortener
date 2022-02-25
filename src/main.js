@@ -42,7 +42,7 @@ $(function () {
 			}
 		});
 		ajax.done(function (res) {
-			if (res["error"] == "") {
+			if (res["error"] === '') {
 				show_result(url, window.location.protocol + '://' + window.location.host + "/" + res['token']);
 			} else {
 				$("#modal-msg-content").html(res["error"]);
