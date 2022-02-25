@@ -43,10 +43,7 @@ func init() {
 
 func UrlHandler(w http.ResponseWriter, r *http.Request) {
 	if r.PostFormValue("short_name") == "" || r.PostFormValue("url") == "" {
-		fmt.Fprintln(w, r.RequestURI, r.Host, r.URL)
-		return
-
-		if len(r.RequestURI) <= 1 {
+		if len(r.URL.Path) <= 1 {
 			_, _ = fmt.Fprintf(w, "Invaid short name or url")
 			return
 		}
