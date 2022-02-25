@@ -2,11 +2,13 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"regexp"
@@ -17,9 +19,14 @@ var collection *mongo.Collection
 var re = regexp.MustCompile("(http|https)://[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-.,@?^=%&:/~+#]*[\\w\\-@?^=%&/~+#])?")
 
 type urlData struct {
-	ShortName string    `bson:"short"`
+	Token     string    `bson:"token"`
 	URL       string    `bson:"url"`
 	CreatedAt time.Time `bson:"created_at"`
+}
+
+type resData struct {
+	Token string `json:"token"`
+	Error string `json:"error"`
 }
 
 func connectDB(uri string) (*mongo.Client, error) {
@@ -42,15 +49,15 @@ func init() {
 }
 
 func UrlHandler(w http.ResponseWriter, r *http.Request) {
-	if r.PostFormValue("short_name") == "" || r.PostFormValue("url") == "" {
+	if r.PostFormValue("url") == "" {
 		if len(r.URL.Path) <= 1 {
-			_, _ = fmt.Fprintf(w, "Invaid short name or url")
+			_, _ = fmt.Fprintf(w, responseJson(resData{Error: "Invaid short name or url"}))
 			return
 		}
 		var u urlData
-		err := collection.FindOne(context.TODO(), bson.M{"short": r.URL.Path[1:]}).Decode(&u)
+		err := collection.FindOne(context.TODO(), bson.M{"token": r.URL.Path[1:]}).Decode(&u)
 		if err != nil {
-			_, _ = fmt.Fprintf(w, "Invaid short name")
+			_, _ = fmt.Fprintf(w, responseJson(resData{Error: "Invaid short name"}))
 			return
 		}
 		http.Redirect(w, r, u.URL, http.StatusMovedPermanently)
@@ -58,24 +65,56 @@ func UrlHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	url := r.PostFormValue("url")
+	token := r.PostFormValue("token")
+
+	if token == "" || !strRules(token) || len(token) > 15 || len(token) < 3 {
+		token = randToken(5)
+	}
+
+	err := collection.FindOne(context.TODO(), bson.M{"token": token}).Decode(&urlData{})
+	for err == nil {
+		token = randToken(5)
+		err = collection.FindOne(context.TODO(), bson.M{"token": token}).Decode(&urlData{})
+	}
 
 	result := re.FindAllStringSubmatch(url, -1)
 	if result == nil {
-		_, _ = fmt.Fprintf(w, "Invaid url")
+		_, _ = fmt.Fprintf(w, responseJson(resData{Error: "Invaid url"}))
 		return
 	}
 
 	u := urlData{
-		ShortName: r.PostFormValue("short_name"),
+		Token:     token,
 		URL:       r.PostFormValue("url"),
 		CreatedAt: time.Now(),
 	}
 
-	insertResult, err := collection.InsertOne(context.TODO(), u)
+	_, err = collection.InsertOne(context.TODO(), u)
 	if err != nil {
-		_, _ = fmt.Fprintln(w, err)
+		_, _ = fmt.Fprintln(w, responseJson(resData{Error: err.Error()}))
 		return
 	}
 
-	_, _ = fmt.Fprintf(w, "Success! %s", insertResult.InsertedID)
+	_, _ = fmt.Fprintf(w, responseJson(resData{Token: u.Token}))
+}
+
+func responseJson(r resData) string {
+	b, _ := json.Marshal(r)
+	return string(b)
+}
+
+func randToken(length int) string {
+	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	bytes := []byte(str)
+	var result []byte
+	rand.Seed(time.Now().UnixNano() + int64(rand.Intn(100)))
+	for i := 0; i < length; i++ {
+		result = append(result, bytes[rand.Intn(len(bytes))])
+	}
+	return string(result)
+}
+
+func strRules(str string) bool {
+	match, _ := regexp.MatchString(`^[A-Za-z0-9]+$`, str)
+	return match
 }
