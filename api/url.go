@@ -48,7 +48,7 @@ func UrlHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		var u urlData
-		err := collection.FindOne(context.TODO(), bson.M{"short": r.RequestURI[1:]}).Decode(&u)
+		err := collection.FindOne(context.TODO(), bson.M{"short": r.URL.Path[1:]}).Decode(&u)
 		if err != nil {
 			_, _ = fmt.Fprintf(w, "Invaid short name")
 			return
