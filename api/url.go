@@ -43,6 +43,8 @@ func init() {
 
 func UrlHandler(w http.ResponseWriter, r *http.Request) {
 	if r.PostFormValue("short_name") == "" || r.PostFormValue("url") == "" {
+		log.Println(r.RequestURI)
+
 		if len(r.RequestURI) <= 1 {
 			_, _ = fmt.Fprintf(w, "Invaid short name or url")
 			return
@@ -74,6 +76,7 @@ func UrlHandler(w http.ResponseWriter, r *http.Request) {
 	insertResult, err := collection.InsertOne(context.TODO(), u)
 	if err != nil {
 		_, _ = fmt.Fprintln(w, err)
+		return
 	}
 
 	_, _ = fmt.Fprintf(w, "Success! %s", insertResult.InsertedID)
