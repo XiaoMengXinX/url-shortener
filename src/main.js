@@ -42,10 +42,11 @@ $(function () {
 			}
 		});
 		ajax.done(function (res) {
-			if (res["error"] === '') {
-				show_result(url, window.location.protocol + '://' + window.location.host + "/" + res['token']);
+			var obj = JSON.parse(res)
+			if (obj["error"] == '') {
+				show_result(url, window.location.protocol + '//' + window.location.host + "/" + obj['token']);
 			} else {
-				$("#modal-msg-content").html(res["error"]);
+				$("#modal-msg-content").html(obj["error"]);
 				$("#modal-msg").modal('show');
 			}
 			$("#form-set-submit").removeAttr("disabled");
