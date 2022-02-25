@@ -45,7 +45,7 @@ func init() {
 		log.Fatal(err)
 	}
 
-	collection = client.Database("test").Collection("urls")
+	collection = client.Database("short_url").Collection("urls")
 }
 
 func UrlHandler(w http.ResponseWriter, r *http.Request) {
