@@ -4,15 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"regexp"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var collection *mongo.Collection
@@ -51,13 +52,13 @@ func init() {
 func UrlHandler(w http.ResponseWriter, r *http.Request) {
 	if r.PostFormValue("url") == "" {
 		if len(r.URL.Path) <= 1 {
-			_, _ = fmt.Fprintf(w, responseJson(resData{Error: "Invaid short name or url"}))
+			_, _ = fmt.Fprintf(w, responseJson(resData{Error: "Invalid short name or url"}))
 			return
 		}
 		var u urlData
 		err := collection.FindOne(context.TODO(), bson.M{"token": r.URL.Path[1:]}).Decode(&u)
 		if err != nil {
-			_, _ = fmt.Fprintf(w, responseJson(resData{Error: "Invaid short name"}))
+			_, _ = fmt.Fprintf(w, responseJson(resData{Error: "Invalid short name"}))
 			return
 		}
 		http.Redirect(w, r, u.URL, http.StatusMovedPermanently)
@@ -66,11 +67,6 @@ func UrlHandler(w http.ResponseWriter, r *http.Request) {
 
 	url := r.PostFormValue("url")
 	token := r.PostFormValue("token")
-
-	if len(url) > 500 {
-		_, _ = fmt.Fprintf(w, responseJson(resData{Error: "URL is too long"}))
-		return
-	}
 
 	if token == "" || !strRules(token) || len(token) > 15 || len(token) < 3 {
 		token = randToken(5)
@@ -84,7 +80,7 @@ func UrlHandler(w http.ResponseWriter, r *http.Request) {
 
 	result := re.FindAllStringSubmatch(url, -1)
 	if result == nil {
-		_, _ = fmt.Fprintf(w, responseJson(resData{Error: "Invaid url"}))
+		_, _ = fmt.Fprintf(w, responseJson(resData{Error: "Invalid url"}))
 		return
 	}
 
