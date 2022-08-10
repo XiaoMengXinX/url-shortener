@@ -83,7 +83,10 @@
                         <label>自定义短链（可选）</label>
                         <div class="form-group input-group input-group-lg">
                             <div class="input-group-addon">
-                                <span>https://neko.center/</span>
+                                <span>https://<script>
+                                        var hostname = window.location.hostname;
+                                        document.write(hostname);
+                                </script>/</span>
                             </div>
                             <label for="form-set-token" class="sr-only">Custom Token</label>
                             <input type="text" id="form-set-token" class="form-control" minlength="5" maxlength="15"
