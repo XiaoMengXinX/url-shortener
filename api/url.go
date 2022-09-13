@@ -68,7 +68,7 @@ func UrlHandler(w http.ResponseWriter, r *http.Request) {
 	url := r.PostFormValue("url")
 	token := r.PostFormValue("token")
 
-	if token == "" || !strRules(token) || len(token) > 15 || len(token) < 3 {
+	if token == "" || !strRules(token) || len(token) > 50 || len(token) < 3 {
 		token = randToken(5)
 	}
 
