@@ -116,6 +116,6 @@ func randToken(length int) string {
 }
 
 func strRules(str string) bool {
-	match, _ := regexp.MatchString(`^[A-Za-z0-9]+$`, str)
+	match, _ := regexp.MatchString(`^[A-Za-z0-9_-]+$`, str)
 	return match
 }
