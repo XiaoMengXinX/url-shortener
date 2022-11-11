@@ -19,7 +19,7 @@ $(function () {
                 return true;
             }
             //var pattern = /^([a-zA-Z0-9]){5,50}$/;
-            var pattern = /^([a-zA-Z0-9])+$/;
+            var pattern = /^([a-zA-Z0-9_-])+$/;
             if (!pattern.test(token)) {
                 $("#modal-msg-content").html("无效的自定义短链，仅支持字母、数字");
                 $("#modal-msg").modal('show');
