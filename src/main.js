@@ -2,7 +2,7 @@ $(function () {
     const URL_MIN_LENGTH = 1;
     const URL_MAX_LENGTH = 500;
     const TOKEN_MIN_LENGTH = 3;
-    const TOKEN_MAX_LENGTH = 15;
+    const TOKEN_MAX_LENGTH = 50;
 
     $('#main-tabs a').click(function (e) {
         e.preventDefault();
@@ -18,10 +18,10 @@ $(function () {
                 $("#modal-msg").modal('show');
                 return true;
             }
-            //var pattern = /^([a-zA-Z0-9]){5,15}$/;
-            var pattern = /^([a-zA-Z0-9_-])+$/;
+            //var pattern = /^([a-zA-Z0-9]){5,50}$/;
+            var pattern = /^([a-zA-Z0-9])+$/;
             if (!pattern.test(token)) {
-                $("#modal-msg-content").html("无效的自定义短链，仅支持字母、数字、下划线");
+                $("#modal-msg-content").html("无效的自定义短链，仅支持字母、数字");
                 $("#modal-msg").modal('show');
                 return true;
             }
