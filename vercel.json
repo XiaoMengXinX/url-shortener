@@ -1,7 +1,7 @@
 {
   "routes": [
     {
-      "src": "/",
+      "src": "/index.html",
       "dest": "/src/index.html"
     },
     {
@@ -13,8 +13,19 @@
       "dest": "/src/style.css"
     },
     {
+      "src": "/create",
+      "dest": "/api/create"
+    },
+    {
       "src": "/.*",
       "dest": "/api/url"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/index.html",
+      "permanent": true
     }
   ]
 }

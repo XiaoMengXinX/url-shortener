@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	resp, _ := http.PostForm("https://neko.center/api/url",
+	resp, _ := http.PostForm("https://[YOUR_DEPLOYMENT_URL]/api/url",
 		url.Values{
 			"url": {"https://www.baidu.com/"}, // The url to be shortened
 			"token": {"baidu"},                // Custom shorten url token (optional)

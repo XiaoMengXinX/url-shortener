@@ -34,7 +34,7 @@ $(function () {
         $("#form-set-submit").attr("disabled", "disabled");
 
         var ajax = $.ajax({
-            url: "/api/url", type: 'POST', data: {
+            url: "/create", type: 'POST', data: {
                 url: url, token: token,
             }
         });
