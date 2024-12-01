@@ -1,24 +1,24 @@
 {
   "rewrites": [
     {
-      "src": "/index.html",
-      "dest": "/src/index.html"
+      "source": "/index.html",
+      "destination": "/src/index.html"
     },
     {
-      "src": "/main.js",
-      "dest": "/src/main.js"
+      "source": "/main.js",
+      "destination": "/src/main.js"
     },
     {
-      "src": "/style.css",
-      "dest": "/src/style.css"
+      "source": "/style.css",
+      "destination": "/src/style.css"
     },
     {
-      "src": "/create",
-      "dest": "/api/create"
+      "source": "/create",
+      "destination": "/api/create"
     },
     {
-      "src": "/.*",
-      "dest": "/api/url"
+      "source": "/.*",
+      "destination": "/api/url"
     }
   ],
   "redirects": [
